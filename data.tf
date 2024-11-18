@@ -1,5 +1,5 @@
 data "http" "host_ip" {
-  url = "https://api.ipify.org"
+   url = "http://ipv4.icanhazip.com"
 }
 
 data "azurerm_subscription" "current" {

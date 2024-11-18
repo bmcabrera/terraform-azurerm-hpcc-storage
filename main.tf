@@ -19,17 +19,17 @@ module "metadata" {
 
   naming_rules = module.naming.yaml
 
-  market              = var.metadata.market
-  location            = local.location
-  sre_team            = var.metadata.sre_team
-  environment         = var.metadata.environment
+  project             = var.metadata.project
   product_name        = var.metadata.product_name
   business_unit       = var.metadata.business_unit
+  environment         = var.metadata.environment
+  market              = var.metadata.market
   product_group       = var.metadata.product_group
-  subscription_type   = var.metadata.subscription_type
   resource_group_type = var.metadata.resource_group_type
+  sre_team            = var.metadata.sre_team
+  subscription_type   = var.metadata.subscription_type
+  location            = var.metadata.location
   subscription_id     = module.subscription.output.subscription_id
-  project             = var.metadata.project
 }
 
 module "resource_groups" {
@@ -40,5 +40,5 @@ module "resource_groups" {
   unique_name = true
   location    = module.metadata.location
   names       = module.metadata.names
-  tags        = merge(local.tags, each.value.tags)
+  tags        = merge(module.metadata.tags, var.metadata.additional_tags)
 }

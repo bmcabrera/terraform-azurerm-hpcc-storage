@@ -12,13 +12,12 @@ locals {
     var.metadata.resource_group_type != "" ? { resource_group_type = var.metadata.resource_group_type } : {}
   ) : module.metadata.names
 
-  tags = merge(var.metadata.additional_tags, { "owner" = var.owner.name, "owner_email" = var.owner.email })
+  #tags = var.metadata.additional_tags
 
   location = var.metadata.location
 
   resource_groups = {
     storage_accounts = {
-      tags = { "enclosed resource" = "OSS storage accounts" }
     }
   }
 

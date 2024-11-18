@@ -24,7 +24,7 @@ resource "azurerm_storage_account" "azurefiles" {
   name                = each.value.storage_account_name
   resource_group_name = module.resource_groups["storage_accounts"].name
   location            = local.location
-  tags                = local.tags
+  tags                = merge(module.metadata.tags, var.metadata.additional_tags)
 
   access_tier                     = each.value.access_tier
   account_kind                    = each.value.account_kind
@@ -37,7 +37,7 @@ resource "azurerm_storage_account" "azurefiles" {
 
   network_rules {
     default_action             = "Deny"
-    ip_rules                   = var.use_authorized_ip_ranges_only ? values(var.authorized_ip_ranges) : values(merge(var.authorized_ip_ranges, { host_ip = data.http.host_ip.response_body }))
+    ip_rules                   = var.use_authorized_ip_ranges_only ? values(var.authorized_ip_ranges) : values(merge(var.authorized_ip_ranges, { host_ip = trimspace(data.http.host_ip.response_body) }))
     virtual_network_subnet_ids = var.subnet_ids //values(each.value.subnet_ids)
     bypass                     = ["AzureServices"]
   }
@@ -56,7 +56,7 @@ resource "azurerm_storage_account" "blobnfs" {
   name                = each.value.storage_account_name
   resource_group_name = module.resource_groups["storage_accounts"].name
   location            = local.location
-  tags                = local.tags
+  tags                = merge(module.metadata.tags, var.metadata.additional_tags)
 
   access_tier                     = each.value.access_tier
   account_kind                    = each.value.account_kind
@@ -71,7 +71,7 @@ resource "azurerm_storage_account" "blobnfs" {
 
   network_rules {
     default_action             = "Deny"
-    ip_rules                   = var.use_authorized_ip_ranges_only ? values(var.authorized_ip_ranges) : values(merge(var.authorized_ip_ranges, { host_ip = data.http.host_ip.response_body }))
+    ip_rules                   = var.use_authorized_ip_ranges_only ? values(var.authorized_ip_ranges) : values(merge(var.authorized_ip_ranges, { host_ip = trimspace(data.http.host_ip.response_body) }))
     virtual_network_subnet_ids = var.subnet_ids //values(each.value.subnet_ids)
     bypass                     = ["AzureServices"]
   }
